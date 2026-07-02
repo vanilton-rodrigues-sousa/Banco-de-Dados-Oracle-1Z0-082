@@ -3,7 +3,7 @@
 
 **SPFILE e PFILE: Como Gerenciar e Recuperar os Arquivos de Inicialização no Banco de dados Oracle**
 
-Durante o processo de `STARTUP` (Abertura e acesso ao banco de dados), dois arquivos de inicialização são fundamentais para que a instância se torne operacional: o SPFILE e o PFILE.
+  Durante o processo de `STARTUP` (Abertura e acesso ao banco de dados), dois arquivos de inicialização são fundamentais para que a instância se torne operacional: o SPFILE e o PFILE.
 
 **SPFILE (Server Parameter File):**
 
@@ -26,9 +26,10 @@ Neste laboratório pratico, o servidor de banco de dados é hospedado em uma maq
 ```
 ls -lh $ORACLE_HOME/dbs;
 ```
-![[Pasted image 20260630214225.png]]
+<img width="930" height="184" alt="image" src="https://github.com/user-attachments/assets/922d206e-ed81-40fb-9cad-f0d53b07a608" />
 
-Para aprofundar nos conceitos teóricos acima, pode se testar todas as hipóteses em ambiente real. Como todo fundamento de banco de dados, jamais deverá ser realizado testes em bases de produção. 
+
+  Para aprofundar nos conceitos teóricos acima, pode se testar todas as hipóteses em ambiente real. Como todo fundamento de banco de dados, jamais deverá ser realizado testes em bases de produção. 
 
 Antes de iniciar os testes por segurança é fundamental criar um backup  do PFILE para garantir uma restauração rápida caso ocorram falhas durante as alterações.
 
@@ -41,7 +42,8 @@ Criação de uma cópia do arquivo PFILE (Utilizando linguagem SQL):
 ```sql
 CREATE PFILE='/home/oracle/backup_pfile/pfile_bkp.ora' FROM SPFILE; 
 ```
-![[Pasted image 20260630220957.png]]
+<img width="930" height="91" alt="image" src="https://github.com/user-attachments/assets/ee5b4894-a997-48d8-99d2-5b32c14120a2" />
+
 Lembrando: Para criar uma cópia de segurança desse tipo de arquivo a instância não precisa estar necessariamente aberta. Mesmo com uma instancia ociosa é possivel realizar uma cópia binaria.
 
 
@@ -49,7 +51,8 @@ Visualizando o arquivo  no diretório criado:
 ```
 ls -lh /home/oracle/backup_pfile;
 ```
-![[Pasted image 20260630221124.png]]
+<img width="930" height="74" alt="image" src="https://github.com/user-attachments/assets/582a4a55-3132-4e4d-a864-526b27029c3c" />
+
 
 Caso o caminho não seja especificado, o Oracle salva o arquivo PFILE no diretório padrão, que normalmente é `$ORACLE_HOME/dbs`.
 
@@ -61,14 +64,16 @@ Após criar a cópia de segurança, será excluído os arquivos originais no dir
  rm -f spfileorcl.ora;
  ls -lh;
 ```
-![[Pasted image 20260630221723.png]]
+<img width="930" height="74" alt="image" src="https://github.com/user-attachments/assets/75b8b2a1-091f-4ea2-8164-e6be00f288fb" />
+
 Durante a remoção dos arquivos de inicialização, a instancia estava em modo `open`(aberta).  Caso seja removido antes desse estado, não será possivel abrir o banco de dados.
 
 Porém, apesar da remoção dos arquivos, a instância continuou rodando normalmente. Neste sentido, iremos tentar alterar o parâmetro `process` no spfile.
 ```
 ALTER SYSTEM SET processes=500 SCOPE=SPFILE;
 ```
-![[Pasted image 20260630221939.png]]
+<img width="930" height="200" alt="image" src="https://github.com/user-attachments/assets/9c260e06-5258-4889-a0ee-f56e2bab1ebe" />
+
 Retorna o erro ORA-01565: Arquivo de spfile não encontrado.
 
 Por padrão, acredita-se que na tecnologia uma das melhores formas de resolver problemas básicos é reinicialização de um software/adware. Baseando nessa hipótese iremos reiniciar a instancia de Banco de Dados.
@@ -76,7 +81,8 @@ Por padrão, acredita-se que na tecnologia uma das melhores formas de resolver p
 SHUTDOWN IMMEDIATE;
 STARTUP;
 ```
-![[Pasted image 20260630222230.png]]
+<img width="930" height="145" alt="image" src="https://github.com/user-attachments/assets/d9333152-f0dd-4df8-8e61-54054040ebdc" />
+
 Retorna o erro ORA-01078: Fala acessar os parâmetros do sistema.
 O Alerta LRM-00109  tem se o seguinte retorno: Não foi possivel acessar o Pfile.
 
@@ -91,13 +97,15 @@ O comando em SQL pode ser realizado da seguinte maneira, passando o tipo arquivo
 ```
 STARTUP PFILE='/home/oracle/backup_pfile/pfile_bkp.ora'
 ```
-![[Pasted image 20260630222524.png]]
+<img width="930" height="174" alt="image" src="https://github.com/user-attachments/assets/3172f877-5775-4e8e-8a49-eac9cf1d7bfc" />
+
 
 A instancia tornou aberta com sucesso. Logo pode ser testado alteração de um parâmetro de inicialização:
 ```
 ALTER SYSTEM SET processes=500 SCOPE=SPFILE;
 ```
-![[Pasted image 20260630223009.png]]
+<img width="930" height="133" alt="image" src="https://github.com/user-attachments/assets/6b24b133-605e-4b75-b936-364190691d5a" />
+
 Retorna o erro ORA-32001: Spfile não esta em uso.
 
 Embora a instância tenha sido recuperada através do PFILE, o SPFILE permanece fora de operação.  Esse fundamento reforça o comportamento do Pfile, de não ser escrito pelo banco  de dados, apenas lido.
@@ -118,14 +126,16 @@ Em nosso ambiente, recuperaremos o spfile, a partir de dados da memoria:
 ```
 CREATE SPFILE FROM MEMORY;
 ```
-![[Pasted image 20260630223608.png]]
+<img width="930" height="110" alt="image" src="https://github.com/user-attachments/assets/4b4fae30-61cd-4ab0-93b2-7788fce94d8f" />
+
 
 
 Conferindo o diretório padrão:
 ```
 !ls -lh $ORACLE_HOME/dbs;
 ```
-![[Pasted image 20260630223814.png]]
+<img width="930" height="233" alt="image" src="https://github.com/user-attachments/assets/9947e4e6-9f20-48d4-828e-b371dcc48848" />
+
 Ao listar o diretório padrão dos arquivos de inicialização, nota-se a presença do spfile, mas não é possivel ver o pfile padrão. Sure novamente duvidas: Como o banco está aberto utilizando Pfile? Se ele não esta listado no diretório. Isso ocorre pois o Pfile em uso foi passado via diretório de forma manual.
 
 
@@ -136,7 +146,8 @@ SHUTDOWN IMMEDIATE;
 STARTUP;
 ```
 
-![[Pasted image 20260630224108.png]]
+<img width="930" height="177" alt="image" src="https://github.com/user-attachments/assets/270324fb-acfa-4157-956e-66b414bac877" />
+
 
 
 Novamente a tentativa de alterar  o parametro process
@@ -144,27 +155,44 @@ Novamente a tentativa de alterar  o parametro process
 ```
 ALTER SYSTEM SET processes=500 SCOPE=SPFILE;
 ```
-![[Pasted image 20260630224155.png]]
+<img width="930" height="89" alt="image" src="https://github.com/user-attachments/assets/9585afd3-7356-4c88-a578-8a8b7a6a5164" />
+
 
 Alteração realizada com sucesso! O SPFILE foi recuperado e está em uso. A partir dele, podemos gerar um PFILE para manter ambos os arquivos atualizados no diretório padrão.
 
 ```
 CREATE PFILE FROM SPFILE;
 ```
-![[Pasted image 20260630224257.png]]
+<img width="930" height="98" alt="image" src="https://github.com/user-attachments/assets/ca709b5e-51a5-457b-8ede-5f8d634db8fe" />
+
 
 Ao verificar o diretório padrão, ambos os arquivos estarão presentes:
 ```
 !ls -lh $ORACLE_HOME/dbs;
 ```
 
-![[Pasted image 20260630224517.png]]
 
 **Conclusão:**  
-Ao realizar alterações nos parâmetros de inicialização do banco de dados, existe o risco de configurar incorretamente a instância, o que pode resultar em sua indisponibilidade. Por isso, é fundamental manter uma cópia de segurança atualizada do arquivo PFILE antes de qualquer modificação. Essa prática simples e preventiva garante uma via rápida e segura para a recuperação do ambiente, minimizando o tempo de inatividade e o impacto operacional.
+  Ao realizar alterações nos parâmetros de inicialização do banco de dados, existe o risco de configurar incorretamente a instância, o que pode resultar em sua indisponibilidade. Por isso, é fundamental manter uma cópia de segurança atualizada do arquivo PFILE antes de qualquer modificação. Essa prática simples e preventiva garante uma via rápida e segura para a recuperação do ambiente, minimizando o tempo de inatividade e o impacto operacional.
 
 Comandos Linux Utilizados:
 
-ls -l
-mkdir
-cd
+ls -l: Lista os arquivos do diretorio; mkdir: Cria um novo diretorio; cd: acessa um diret quando permitido acesso.
+
+
+
+Referências: 
+DBAOCM 
+https://mentoria.dbaocm.com/
+
+Managing Initialization Parameters Using a Server Parameter File
+https://docs.oracle.com/en/database/oracle/oracle-database/19/admin/creating-and-configuring-an-oracledatabase.html#GUID-7302C60F-E96E-4202-AC81-25A6C93EEFA3
+
+Specifying Initialization Parameters
+https://docs.oracle.com/en/database/oracle/oracle-database/19/admin/creating-and-configuring-an-oracledatabase.html#GUID-052F49CA-731A-4608-A2B9-2C801621D80F
+
+
+Initialization Parameters
+https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/initialization-parameters-2.html#GUID
+FD266F6F-D047-4EBB-8D96-B51B1DCA2D61
+
