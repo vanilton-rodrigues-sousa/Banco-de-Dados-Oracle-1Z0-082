@@ -193,6 +193,5 @@ https://docs.oracle.com/en/database/oracle/oracle-database/19/admin/creating-and
 
 
 Initialization Parameters
-https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/initialization-parameters-2.html#GUID
-FD266F6F-D047-4EBB-8D96-B51B1DCA2D61
+https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/initialization-parameters-2.html#GUIDFD266F6F-D047-4EBB-8D96-B51B1DCA2D61
 
